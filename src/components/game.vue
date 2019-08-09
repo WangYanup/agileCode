@@ -22,27 +22,33 @@ export default {
       return resultArr;
     },
 
+    // 可以省略掉text参数，但是如果省略的话需要在if语句中增加判断。
     say (val) {
+      
       let text = '';
 
-      if (this.sumDivisible(val, 3) || this.includeNum(val, 3)) {
+      if (this.divisibleByCalculate(val, 3) || this.includeNum(val, 3)) {
         text += 'fizz';
       }
 
-      if (this.sumDivisible(val, 5) || this.includeNum(val, 5)) {
+      if (this.divisibleByCalculate(val, 5) || this.includeNum(val, 5)) {
         text += 'buzz';
       }
 
-      text === '' ? text = val.toString():'';
+      if (text === '') {
+        text = val.toString();
+      }
 
       return text;
     },
-
+    /*
+    * 
+    */
     includeNum (num, val) {
       return num.toString().indexOf(val) > -1;
     },
 
-    sumDivisible (num, divisiable) {
+    divisibleByCalculate (num, divisiable) {
       return num % divisiable === 0;
     }
   }
