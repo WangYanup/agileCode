@@ -1,6 +1,5 @@
 <template>
   <section>
-    <button id="add" @click="add">加1</button>  
   </section>
 </template>
 <script>
@@ -10,29 +9,37 @@ export default {
       a: 0
     }
   },
+  mounted () {
+    console.log(this.printGame(1, 100));
+  },
   methods: {
-    add () {
-      this.a ++;
-    },
+    printGame (start, end) {
+      let resultArr = [];
+      for(let i = start; i <= end; i++) {
+        resultArr.push(this.say(i));
+      }
 
-    addNum (a, b) {
-      return a + b;
+      return resultArr;
     },
 
     say (val) {
-      if (this.sumDivisible(val, 3) && this.sumDivisible(val, 5)) {
-        val = 'fizzbuzz';
+      let text = '';
+
+      if (this.sumDivisible(val, 3) || this.includeNum(val, 3)) {
+        text += 'fizz';
       }
 
-      if (this.sumDivisible(val, 3)) {
-        val = 'fizz';
+      if (this.sumDivisible(val, 5) || this.includeNum(val, 5)) {
+        text += 'buzz';
       }
 
-      if (this.sumDivisible(val, 5)) {
-        val = 'buzz';
-      }
+      text === '' ? text = val.toString():'';
 
-      return val.toString();
+      return text;
+    },
+
+    includeNum (num, val) {
+      return num.toString().indexOf(val) > -1;
     },
 
     sumDivisible (num, divisiable) {

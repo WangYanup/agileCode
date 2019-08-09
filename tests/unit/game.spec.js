@@ -14,29 +14,30 @@ describe('测试game', () => {
   //   assert.equal(vm.a, 1);
   // });
 
-  // it('测试1 + 2 的值', () => {
-  //   let result = vm.addNum(1, 2);
-  //   assert.equal(result, 3);
-  // });
+  it('测试1-100中被3和5整除的数', () => {
+    let testArr = [
+      {num: 1, val: '1'},
+      {num: 3, val: 'fizz'},
+      {num: 5, val: 'buzz'},
+      {num: 15, val: 'fizzbuzz'}
+    ];
 
-  it('值为1，报数1', () => {
-    test(1, '1');
+    test(testArr);    
   });
 
-  it('值为3，报数fizz', () => {
-    test(3, 'fizz');
+  it('测试1-100中包含3和5的数字', () => {
+    let testArr = [
+      {num: 13, val: 'fizz'},
+      {num: 56, val: 'buzz'},
+      {num: 53, val: 'fizzbuzz'}
+    ];
+    test(testArr);    
   });
 
-  it('值为5，报数buzz', () => {
-    test(5, 'buzz');
-  });
-
-  it('值为15，报数fizzbuzz', () => {
-    test(15, 'fizzbuzz');
-  });
-
-  let test = (num, confirm) => {
-    let result = vm.say(num);
-    assert.equal(result, confirm);
+  const test = (testArr) => {
+    testArr.forEach((item) => {
+      let result = vm.say(item.num);
+      assert.equal(result, item.val);
+    });
   } 
 });
