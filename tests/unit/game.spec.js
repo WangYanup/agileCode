@@ -22,7 +22,7 @@ describe('测试game', () => {
       {num: 15, val: 'fizzbuzz'}
     ];
 
-    test(testArr);    
+    test(testArr); 
   });
 
   it('测试1-100中包含3和5的数字', () => {
