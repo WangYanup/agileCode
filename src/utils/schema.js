@@ -1,76 +1,92 @@
-import LabelParams from "./label";
+import Err from "./err";
+
 class Schema {
   constructor (label, val) {
     this.label = label;
     this.val = val;
+    this.labelObj = null;
+
+    this.getLabelObj();
+    this.isAllowUseLabel();
+    this.setSchemaDefaultValue();
+    this.verifyLabelValType();
   }
 
-  transformLabelVal () {
-    let type = Schema.getLabelType(this.label);
-    switch (type) {
-      case 'boolean':
-          if (this.val === 'false') {
-            this.val = false;
-          } else
-          if (this.val === 'true') {
-            this.val = true;
-          } else {
-            Schema.outErrVal(this.label);
-          }
-        break;
-      case 'number':
-          if (!isNaN(parseInt(this.val))) {
-            this.val = parseInt(this.val);
-          } else {
-            Schema.outErrVal(this.label);
-          }
-        break;
-      case 'string':
-          this.val = this.val.toString();
-        break;
-      default:
-          Schema.outErrVal(this.label);
+  getLabelObj () {
+    let filterArr = Schema.constLabel().filter(item => {
+      return item.label === this.label;
+    });
+    this.labelObj = filterArr[0];
+  }
+  
+  isAllowUseLabel () {
+    if (!this.labelObj) {
+      return Err.say(this.label + ' 标签不被支持');
+    } else {
+      return true;
     }
   }
 
-  static outErrVal (label) {
-    throw new Error('标签' + label + '值不是规定的类型');
+  setSchemaDefaultValue () {
+    if (this.val) {
+      return;
+    }
+    if ('default' in this.labelObj) {
+      this.val = this.labelObj.default;
+    } else {
+      Err.say(this.label + ' 标签需要给定参数值');
+    }
   }
 
-  static isHaveLabel (label) {
-    return LabelParams.some(item => {
-      if (item.label === label) {
-        return true;
-      }
-    });
+  verifyLabelValType () {
+    if (typeof this.val == this.labelObj.type) {
+      return;
+    }
+
+    switch (this.labelObj.type) {
+      case 'boolean':
+        if (this.val === 'false') {
+          this.val = false;
+        } else 
+        if (this.val === 'true') {
+          this.val = true;
+        } else {
+          Err.say(this.label + ' 标签的值不合法');
+        }
+        break;
+      case 'number':
+        if (!isNaN(this.val * 1)) {
+          this.val = this.val * 1;
+        } else {
+          Err.say(this.label + ' 标签的值不合法');
+        }
+        break;
+      case 'string':
+        this.val = this.val.toString();
+        break;
+      default:
+        Err.say(this.label + ' 标签的值不合法');
+    }
   }
 
-  static isLableType (label, val) {
-    return LabelParams.some(item => {
-      if (item.label === label && typeof val === item.type) {
-        return true;
+  static constLabel () {
+    return [
+      {
+        label: 'l',
+        type: 'boolean',
+        default: false
+      },
+      {
+        label: 'p',
+        type: 'number',
+        default: 0
+      },
+      {
+        label: 'd',
+        type: 'string',
+        default: ''
       }
-    });
-  }
-
-  static getLabelType (label) {
-    let labelArr = LabelParams.filter(item => {
-      if (item.label === label) {
-        return item;
-      }
-    });
-
-    return labelArr[0].type;
-  }
-
-  static outDefaultVal (label) {
-    let defaultVal = null;
-    LabelParams.forEach(item => {
-      if (item.label === label) {
-        defaultVal = item.default;
-      }
-    });
-    return defaultVal;
+    ];
   }
 }
 
