@@ -1,4 +1,5 @@
 import Err from "./err";
+import HandleSchemaValue from './index';
 
 class Schema {
   constructor (label, val) {
@@ -45,24 +46,19 @@ class Schema {
 
     switch (this.labelObj.type) {
       case 'boolean':
-        if (this.val === 'false') {
-          this.val = false;
-        } else 
-        if (this.val === 'true') {
-          this.val = true;
-        } else {
-          Err.say(this.label + ' 标签的值不合法');
-        }
+        this.val = HandleSchemaValue.isBoolean(this.label, this.val);
         break;
       case 'number':
-        if (!isNaN(this.val * 1)) {
-          this.val = this.val * 1;
-        } else {
-          Err.say(this.label + ' 标签的值不合法');
-        }
+        this.val = HandleSchemaValue.isNumber(this.label, this.val);
         break;
       case 'string':
-        this.val = this.val.toString();
+        this.val = HandleSchemaValue.isString(this.val);
+        break;
+      case 'stringArray':
+        this.val = HandleSchemaValue.isStringArray(this.val);
+        break;
+      case 'numberArray':
+        this.val = HandleSchemaValue.isNumberArray(this.label, this.val);
         break;
       default:
         Err.say(this.label + ' 标签的值不合法');
@@ -85,7 +81,17 @@ class Schema {
         label: 'd',
         type: 'string',
         default: ''
-      }
+      },
+      {
+        label: 'g',
+        type: 'stringArray',
+        default: ['']
+      },
+      {
+        label: 'f',
+        type: 'numberArray',
+        default: [0]
+      },
     ];
   }
 }
