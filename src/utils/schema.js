@@ -13,6 +13,36 @@ class Schema {
     this.verifyLabelValType();
   }
 
+  static constLabel () {
+    return [
+      {
+        label: 'l',
+        type: 'boolean',
+        default: false
+      },
+      {
+        label: 'p',
+        type: 'number',
+        default: 0
+      },
+      {
+        label: 'd',
+        type: 'string',
+        default: ''
+      },
+      {
+        label: 'g',
+        type: 'stringArray',
+        default: ['']
+      },
+      {
+        label: 'f',
+        type: 'numberArray',
+        default: [0]
+      },
+    ];
+  }
+
   getLabelObj () {
     let filterArr = Schema.constLabel().filter(item => {
       return item.label === this.label;
@@ -43,56 +73,26 @@ class Schema {
     if (typeof this.val == this.labelObj.type) {
       return;
     }
-
+    let hadleSchemaValue = new HandleSchemaValue(this.label, this.val);
     switch (this.labelObj.type) {
       case 'boolean':
-        this.val = HandleSchemaValue.isBoolean(this.label, this.val);
+        this.val = hadleSchemaValue.isBoolean(this.label, this.val);
         break;
       case 'number':
-        this.val = HandleSchemaValue.isNumber(this.label, this.val);
+        this.val = hadleSchemaValue.isNumber(this.label, this.val);
         break;
       case 'string':
-        this.val = HandleSchemaValue.isString(this.val);
+        this.val = hadleSchemaValue.isString(this.val);
         break;
       case 'stringArray':
-        this.val = HandleSchemaValue.isStringArray(this.val);
+        this.val = hadleSchemaValue.isStringArray(this.val);
         break;
       case 'numberArray':
-        this.val = HandleSchemaValue.isNumberArray(this.label, this.val);
+        this.val = hadleSchemaValue.isNumberArray(this.label, this.val);
         break;
       default:
         Err.say(this.label + ' 标签的值不合法');
     }
-  }
-
-  static constLabel () {
-    return [
-      {
-        label: 'l',
-        type: 'boolean',
-        default: false
-      },
-      {
-        label: 'p',
-        type: 'number',
-        default: 0
-      },
-      {
-        label: 'd',
-        type: 'string',
-        default: ''
-      },
-      {
-        label: 'g',
-        type: 'stringArray',
-        default: ['']
-      },
-      {
-        label: 'f',
-        type: 'numberArray',
-        default: [0]
-      },
-    ];
   }
 }
 

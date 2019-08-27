@@ -1,47 +1,50 @@
 import Err from "./err";
 
 class HandleSchemaValue {
-  static isBoolean (label, val) {
-    if (val === 'false') {
-      val = false;
+  constructor (label, val) {
+    this.label = label;
+    this.val = val;
+  }
+  isBoolean () {
+    if (this.val === 'false') {
+      this.val = false;
     } else 
-    if (val === 'true') {
-      val = true;
+    if (this.val === 'true') {
+      this.val = true;
     } else {
-      Err.say(label + ' 标签的值不合法, 值为false / true');
+      Err.say(this.label + ' 标签的值不合法, 值为false / true');
     }
 
-    return val;
+    return this.val;
   }
 
-  static isNumber (label, val) {
-    if (!isNaN(val * 1)) {
-      val = val * 1;
+  isNumber () {
+    if (!isNaN(this.val * 1)) {
+      this.val = this.val * 1;
     } else {
-      Err.say(label + ' 标签的值不合法');
+      Err.say(this.label + ' 标签的值不合法');
     }
-    return val;
+    return this.val;
   }
 
-  static isString (val) {
-      return val.toString();
+  isString () {
+      return this.val.toString();
   }
 
-  static isStringArray (val) {
-    return val.split(',');
-
+  isStringArray () {
+    return this.val.split(',');
   }
 
-  static isNumberArray (label, val) {
-    val = val.split(',');
-    val.map((item, index) => {
+  isNumberArray () {
+    this.val = this.val.split(',');
+    this.val.map((item, index) => {
       if (isNaN(parseInt(item))) {
-        Err.say(label + ' 标签的值不合法, 值应为数字列表');
+        Err.say(this.label + ' 标签的值不合法, 值应为数字列表');
       } else {
-        val[index] = parseInt(item);
+        this.val[index] = parseInt(item);
       }
     });
-    return val;
+    return this.val;
   }
 }
 
