@@ -1,18 +1,16 @@
 class Command {
   constructor (commandText) {
     this.command = {};
-    let commandArr = commandText.split(' ');
-    commandArr.forEach((item, index) => {
+    commandText.split(' ').forEach((item, index, arr) => {
       let flag = null;
       let value = null;
       if (this.isFlag(item)) {
         flag = item.substring(1);
-        
-        let next = commandArr[index + 1];
-        if (!this.isFlag(next)) {
-          value = next;
-        }
+        let next = arr[index + 1];
 
+        if (!this.isFlag(next)) {
+          value = this.FlagValue(next);
+        }
         this.command[flag] = value;
       }
     });
@@ -20,6 +18,14 @@ class Command {
 
   isFlag (item) {
     return item.indexOf('-') === 0 && isNaN(item * 1);
+  }
+
+  FlagValue (item) {
+    if (item.indexOf(',') > -1) {
+      return item.split(',');
+    }
+
+    return item;
   }
 
   getValue ({flagName}) {

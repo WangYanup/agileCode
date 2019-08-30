@@ -5,7 +5,7 @@ class Parser {
   }
 
   getValue ({flagName}) {
-    return this.schema.getValue({flagName, value:this.command.getValue({flagName})});
+    return this.schema.getValue({flagName, value: this.command.getValue({flagName})});
   }
 }
 

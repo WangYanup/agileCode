@@ -1,19 +1,19 @@
 class Schema {
-  constructor (shcemaText) {
+  constructor (schemaText) {
     this.schema = {};
-    shcemaText.split(' ')
-      .map(item => item.split(':'))
-      .forEach(item => {
-        this.schema[item[0]] = item[1];
-      });
+    schemaText.split(' ')
+    .map(item => {
+      let flagToVal = item.split(':');
+      this.schema[flagToVal[0]] = flagToVal[1];
+    });
   }
 
   getValue ({flagName, value}) {
     let type = this.schema[flagName];
     switch (type) {
       case 'boolean':
-        if (value) {
-          return value;
+        if (value === 'true') {
+          return true;
         }
         return false;
       case 'integer':
@@ -26,10 +26,19 @@ class Schema {
           return value;
         }
         return '';
+      case 'stringArray':
+        if (value) {
+          return value;
+        } 
+        return [''];
+      case 'integerArray':
+        if (value.length > 0) {
+          return value.map(item => item*1);
+        }
+        return [0];
       default:
         return value;
     }
-    
   }
 }
 
