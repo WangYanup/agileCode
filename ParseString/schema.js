@@ -31,7 +31,6 @@ class Schema {
   }
 
   getVal({tag, val}) {
-    console.log(this.flagObj[tag])
     return this['is'+ this.flagObj[tag]](val)
   }
 }
